@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> MOVIE NIGHT </title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #FFD700;
+    --gold-dim: #B8960C;
+    --red: #8B1A1A;
+    --red-bright: #C0392B;
+    --cream: #FFF8E7;
+    --bg: #07070F;
+    --bg2: #0f0f1e;
+    --text: #F5EED6;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Lato', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── SEARCHLIGHTS ── */
+  #searchlights {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .light {
+    position: absolute;
+    width: 200px;
+    height: 200vh;
+    transform-origin: top center;
+    opacity: 0.07;
+  }
+
+  .light-1 {
+    left: 10%; top: 0;
+    background: conic-gradient(from -4deg at 50% 0%, transparent 0deg, rgba(255,220,100,0.9) 4deg, rgba(255,220,100,0.9) 6deg, transparent 10deg);
+    animation: sweep1 8s ease-in-out infinite alternate;
+  }
+  .light-2 {
+    left: 20%; top: 0;
+    background: conic-gradient(from -4deg at 50% 0%, transparent 0deg, rgba(220,200,255,0.9) 4deg, rgba(220,200,255,0.9) 6deg, transparent 10deg);
+    animation: sweep2 11s ease-in-out infinite alternate;
+  }
+  .light-3 {
+    right: 10%; top: 0;
+    background: conic-gradient(from -4deg at 50% 0%, transparent 0deg, rgba(255,220,100,0.9) 4deg, rgba(255,220,100,0.9) 6deg, transparent 10deg);
+    animation: sweep3 9.5s ease-in-out infinite alternate;
+  }
+  .light-4 {
+    right: 22%; top: 0;
+    background: conic-gradient(from -4deg at 50% 0%, transparent 0deg, rgba(220,200,255,0.9) 4deg, rgba(220,200,255,0.9) 6deg, transparent 10deg);
+    animation: sweep4 12s ease-in-out infinite alternate;
+  }
+
+  @keyframes sweep1 { from { transform: rotate(-35deg); } to { transform: rotate(35deg); } }
+  @keyframes sweep2 { from { transform: rotate(-20deg); } to { transform: rotate(45deg); } }
+  @keyframes sweep3 { from { transform: rotate(35deg); } to { transform: rotate(-35deg); } }
+  @keyframes sweep4 { from { transform: rotate(20deg); } to { transform: rotate(-45deg); } }
+
+  /* ── MARQUEE HEADER ── */
+  header {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 3rem 1rem 1.5rem;
+  }
+
+  .marquee-frame {
+    display: inline-block;
+    border: 3px solid var(--gold-dim);
+    border-radius: 4px;
+    padding: 1.5rem 3rem;
+    position: relative;
+    background: rgba(0,0,0,0.6);
+  }
+
+  .bulbs {
+    position: absolute;
+    inset: -14px;
+    pointer-events: none;
+  }
+
+  .bulb {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 6px 2px rgba(255,215,0,0.7);
+    animation: bulb-blink 1.8s ease-in-out infinite;
+  }
+
+  @keyframes bulb-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
+
+  .marquee-eyebrow {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: 0.75rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+
+  .marquee-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: clamp(2rem, 6vw, 4rem);
+    color: var(--cream);
+    line-height: 1.1;
+    text-shadow: 0 0 40px rgba(255,215,0,0.3);
+  }
+
+  .marquee-title span {
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  .marquee-sub {
+    font-size: 0.85rem;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    color: rgba(255,248,231,0.6);
+    margin-top: 0.5rem;
+    text-transform: uppercase;
+  }
+
+  /* ── CURTAIN DIVIDER ── */
+  .curtain-divider {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    height: 28px;
+    margin: 0.5rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .curtain-divider::before,
+  .curtain-divider::after {
+    content: '';
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+    max-width: 300px;
+  }
+
+  .curtain-star { color: var(--gold); font-size: 1rem; }
+
+  /* ── HERO SLIDESHOW ── */
+  .hero-section {
+    position: relative;
+    z-index: 10;
+    padding: 0 1.5rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .slideshow-wrapper {
+    position: relative;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid var(--gold-dim);
+    box-shadow: 0 0 60px rgba(139,26,26,0.4), 0 0 120px rgba(0,0,0,0.8);
+    background: #111;
+    aspect-ratio: 4/5;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 1.2s ease-in-out;
+  }
+
+  .slide.active { opacity: 1; }
+
+  .slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .slide-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 60%);
+  }
+
+  /* NO .slide-caption — captions hidden */
+
+  .slide-prev, .slide-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+    background: rgba(0,0,0,0.55);
+    border: 1px solid rgba(255,215,0,0.4);
+    color: var(--gold);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .slide-prev:hover, .slide-next:hover {
+    background: rgba(139,26,26,0.7);
+    border-color: var(--gold);
+  }
+
+  .slide-prev { left: 0.8rem; }
+  .slide-next { right: 0.8rem; }
+
+  .slide-dots {
+    position: absolute;
+    bottom: 0.6rem;
+    right: 1rem;
+    display: flex;
+    gap: 6px;
+    z-index: 20;
+  }
+
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255,248,231,0.35);
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+  }
+
+  .dot.active {
+    background: var(--gold);
+    transform: scale(1.3);
+  }
+
+  /* ── PLAYLIST SECTION ── */
+  .section-label {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 1.5rem 1rem 1rem;
+  }
+
+  .section-label h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 700;
+    color: var(--cream);
+  }
+
+  .section-label h2 span { color: var(--gold); font-style: italic; }
+
+  .section-label p {
+    font-size: 0.85rem;
+    color: rgba(245,238,214,0.5);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 0.3rem;
+  }
+
+  /* ── MOVIE GRID ── */
+  .movie-grid {
+    position: relative;
+    z-index: 10;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1.5rem 5rem;
+  }
+
+  .movie-card {
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(255,215,0,0.15);
+    background: var(--bg2);
+    cursor: pointer;
+    transition: transform 0.3s ease, border-color 0.3s, box-shadow 0.3s;
+    color: inherit;
+    display: block;
+  }
+
+  .movie-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    border-color: var(--gold-dim);
+    box-shadow: 0 12px 40px rgba(139,26,26,0.5);
+  }
+
+  .movie-thumb {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: #1a1a2e;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .movie-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .movie-card:hover .movie-thumb img { transform: scale(1.07); }
+
+  .play-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0);
+    transition: background 0.3s;
+  }
+
+  .movie-card:hover .play-overlay { background: rgba(139,26,26,0.3); }
+
+  .play-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.6);
+    border: 2px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.3s, transform 0.3s;
+  }
+
+  .movie-card:hover .play-circle {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .play-circle::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    border-top: 9px solid transparent;
+    border-bottom: 9px solid transparent;
+    border-left: 14px solid var(--gold);
+    margin-left: 3px;
+  }
+
+  .movie-info {
+    padding: 0.7rem 0.85rem 0.85rem;
+  }
+
+  .movie-num {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 0.25rem;
+  }
+
+  .movie-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1.3;
+  }
+
+  /* ── MOVIE MODAL ── */
+  .movie-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(0,0,0,0.92);
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .movie-modal.open { display: flex; }
+
+  .modal-inner {
+    position: relative;
+    width: 100%;
+    max-width: 960px;
+    background: #0a0a18;
+    border: 2px solid var(--gold-dim);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 0 80px rgba(139,26,26,0.6);
+  }
+
+  .modal-title-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: rgba(0,0,0,0.6);
+    border-bottom: 1px solid rgba(255,215,0,0.2);
+  }
+
+  .modal-title-bar span {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--cream);
+    font-style: italic;
+  }
+
+  .modal-close {
+    background: var(--red);
+    border: 2px solid var(--gold-dim);
+    color: var(--gold);
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    flex-shrink: 0;
+  }
+
+  .modal-close:hover { background: var(--red-bright); }
+
+  .modal-video {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+  }
+
+  .modal-video iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  /* ── MUSIC PLAYER ── */
+  .music-player {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+  }
+
+  .music-label {
+    background: rgba(0,0,0,0.75);
+    border: 1px solid rgba(255,215,0,0.3);
+    border-radius: 20px;
+    padding: 0.3rem 0.8rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: rgba(255,248,231,0.7);
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.3s, transform 0.3s;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .music-player:hover .music-label {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .music-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--red);
+    border: 3px solid var(--gold);
+    color: var(--gold);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px rgba(139,26,26,0.7), 0 0 40px rgba(0,0,0,0.5);
+    transition: transform 0.2s, background 0.2s;
+    animation: pulse-btn 3s ease-in-out infinite;
+  }
+
+  .music-btn:hover {
+    transform: scale(1.1);
+    background: #a82020;
+    animation: none;
+  }
+
+  @keyframes pulse-btn {
+    0%, 100% { box-shadow: 0 0 20px rgba(139,26,26,0.7), 0 0 40px rgba(0,0,0,0.5); }
+    50% { box-shadow: 0 0 30px rgba(200,50,50,0.9), 0 0 60px rgba(139,26,26,0.4); }
+  }
+
+  .music-btn svg {
+    width: 26px;
+    height: 26px;
+    fill: var(--gold);
+    transition: opacity 0.2s;
+  }
+
+  .now-playing {
+    position: fixed;
+    bottom: 5.5rem;
+    right: 1.5rem;
+    z-index: 99;
+    background: rgba(7,7,15,0.92);
+    border: 1px solid rgba(255,215,0,0.35);
+    border-radius: 12px;
+    padding: 0.7rem 1rem;
+    max-width: 220px;
+    display: none;
+  }
+
+  .now-playing.show { display: block; }
+
+  .np-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 0.25rem;
+  }
+
+  .np-track {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.88rem;
+    color: var(--cream);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .np-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 16px;
+    margin-top: 0.4rem;
+  }
+
+  .np-bar {
+    width: 3px;
+    background: var(--gold);
+    border-radius: 2px;
+    animation: bar-dance 0.8s ease-in-out infinite alternate;
+  }
+
+  .np-bar:nth-child(2) { animation-delay: 0.15s; }
+  .np-bar:nth-child(3) { animation-delay: 0.3s; }
+  .np-bar:nth-child(4) { animation-delay: 0.1s; }
+  .np-bar:nth-child(5) { animation-delay: 0.25s; }
+
+  @keyframes bar-dance {
+    from { height: 3px; }
+    to { height: 14px; }
+  }
+
+  .np-bars.paused .np-bar { animation-play-state: paused; height: 5px; }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 1.5rem;
+    font-size: 0.78rem;
+    color: rgba(245,238,214,0.3);
+    letter-spacing: 0.1em;
+    border-top: 1px solid rgba(255,215,0,0.08);
+  }
+
+  footer a {
+    color: var(--gold-dim);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  footer a:hover { color: var(--gold); }
+
+  .no-img {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1a0a0a, #0a0a1a);
+    font-size: 3rem;
+  }
+
+  @media (max-width: 600px) {
+    .movie-grid { grid-template-columns: repeat(2, 1fr); gap: 0.8rem; padding: 0 0.8rem 5rem; }
+    .marquee-frame { padding: 1rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="searchlights">
+  <div class="light light-1"></div>
+  <div class="light light-2"></div>
+  <div class="light light-3"></div>
+  <div class="light light-4"></div>
+</div>
+
+<header>
+  <div class="marquee-frame">
+    <div class="bulbs" id="bulbs"></div>
+    <div class="marquee-eyebrow">Now Showing</div>
+    <h1 class="marquee-title">Retro <span>Cinema</span></h1>
+    <div class="marquee-sub">✦ Lights &nbsp;·&nbsp; Camera &nbsp;·&nbsp; Action ✦</div>
+  </div>
+</header>
+
+<div class="curtain-divider">
+  <span class="curtain-star">✦</span>
+  <span class="curtain-star">✦</span>
+  <span class="curtain-star">✦</span>
+</div>
+
+<section class="hero-section">
+  <div class="slideshow-wrapper" id="slideshow">
+    <button class="slide-prev" onclick="changeSlide(-1)" aria-label="Previous">&#8592;</button>
+    <button class="slide-next" onclick="changeSlide(1)" aria-label="Next">&#8594;</button>
+    <div class="slide-dots" id="slide-dots"></div>
+  </div>
+</section>
+
+<div class="curtain-divider">
+  <span class="curtain-star">✦</span>
+  <span class="curtain-star">✦</span>
+  <span class="curtain-star">✦</span>
+</div>
+
+<div class="section-label">
+  <h2>The <span>Feature Films</span></h2>
+  <p>Click a title to watch</p>
+</div>
+
+<div class="movie-grid" id="movie-grid"></div>
+
+<!-- ── MOVIE MODAL ── -->
+<div class="movie-modal" id="movie-modal">
+  <div class="modal-inner">
+    <div class="modal-title-bar">
+      <span id="modal-movie-title">Now Showing</span>
+      <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+    </div>
+    <div class="modal-video">
+      <iframe
+        id="movie-iframe"
+        src=""
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+  </div>
+</div>
+
+<div class="music-player">
+  <div class="music-label" id="music-label">🎵 Theater Music</div>
+  <button class="music-btn" id="music-btn" onclick="toggleMusic()" aria-label="Play music">
+    <svg id="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+    <svg id="pause-icon" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+  </button>
+</div>
+
+<div class="now-playing" id="now-playing">
+  <div class="np-label">Now Playing</div>
+  <div class="np-track" id="np-track">Radio Meltdown</div>
+  <div class="np-bars" id="np-bars">
+    <div class="np-bar"></div>
+    <div class="np-bar"></div>
+    <div class="np-bar"></div>
+    <div class="np-bar"></div>
+    <div class="np-bar"></div>
+  </div>
+</div>
+
+<footer>
+  🎬 &nbsp;Retro Cinema &nbsp;·&nbsp; Book us for your party at
+  <a href="https://www.Radiomeltdown.store" target="_blank" rel="noopener">Radiomeltdown.store</a>
+  &nbsp;·&nbsp; ✦
+</footer>
+
+<!-- Radio stream — never touched by movie clicks -->
+<audio id="theater-audio"></audio>
+
+<script>
+// ─────────────────────────────────────────────
+// MOVIES
+// ─────────────────────────────────────────────
+
+const PLAYLIST_ID = 'PLQ9p6GARi5fCqqXH3joAm8s8B2CWm2OU2';
+
+const MOVIES = [
+  { title: 'She-Devil',                              thumb: null, youtubeId: null, playlistId: PLAYLIST_ID },
+  { title: "Joe's Apartment",                        thumb: null, youtubeId: null, playlistId: PLAYLIST_ID },
+  { title: 'The Education of Sonny Carson',          thumb: null, youtubeId: null, playlistId: PLAYLIST_ID },
+  { title: 'Jo Jo Dancer, Your Life Is Calling',     thumb: null, youtubeId: null, playlistId: PLAYLIST_ID },
+  { title: 'The Coldest Winter Ever',                thumb: null, youtubeId: null, playlistId: PLAYLIST_ID },
+  { title: 'The Island of Dr. Moreau (1996)',        thumb: null, youtubeId: null, playlistId: PLAYLIST_ID },
+  { title: 'Milk Money',                             thumb: null, youtubeId: null, playlistId: PLAYLIST_ID },
+  { title: 'Drylongso',                              thumb: null, youtubeId: null, playlistId: PLAYLIST_ID },
+  { title: 'The Feast of All Saints',                thumb: null, youtubeId: null, playlistId: PLAYLIST_ID },
+  { title: 'Movie 10',                               thumb: null, youtubeId: null, playlistId: PLAYLIST_ID },
+  { title: 'Movie 11',                               thumb: null, youtubeId: null, playlistId: PLAYLIST_ID },
+  { title: 'Movie 12',                               thumb: null, youtubeId: null, playlistId: PLAYLIST_ID },
+  { title: 'Movie 13',                               thumb: null, youtubeId: null, playlistId: PLAYLIST_ID },
+  { title: 'Movie 14',                               thumb: null, youtubeId: null, playlistId: PLAYLIST_ID },
+];
+
+// ─────────────────────────────────────────────
+// MODAL — opens iframe without touching audio
+// ─────────────────────────────────────────────
+
+const modal      = document.getElementById('movie-modal');
+const iframe     = document.getElementById('movie-iframe');
+const modalTitle = document.getElementById('modal-movie-title');
+
+function openModal(movie) {
+  // Build embed URL
+  let embedSrc;
+  if (movie.youtubeId) {
+    embedSrc = `https://www.youtube.com/embed/${movie.youtubeId}?autoplay=1&rel=0`;
+  } else if (movie.playlistId) {
+    embedSrc = `https://www.youtube.com/embed/videoseries?list=${movie.playlistId}&autoplay=1&rel=0`;
+  } else {
+    return;
+  }
+
+  modalTitle.textContent = movie.title;
+  iframe.src = embedSrc;          // load iframe — audio element is completely separate
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  iframe.src = '';                // stop video without touching audio
+  modal.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Close on backdrop click
+modal.addEventListener('click', (e) => {
+  if (e.target === modal) closeModal();
+});
+
+// Close on Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+});
+
+// ─────────────────────────────────────────────
+// MOVIE GRID
+// ─────────────────────────────────────────────
+
+const grid = document.getElementById('movie-grid');
+
+MOVIES.forEach((m, i) => {
+  const card = document.createElement('div');
+  card.className = 'movie-card';
+
+  const thumbSrcs = m.thumb
+    ? [m.thumb]
+    : [`Images/IMG${i+1}.png`, `Images/IMG${i+1}.jpeg`, `Images/IMG${i+1}.jpg`];
+
+  card.innerHTML = `
+    <div class="movie-thumb">
+      <div class="no-img" id="placeholder-${i}">🎬</div>
+      <div class="play-overlay">
+        <div class="play-circle"></div>
+      </div>
+    </div>
+    <div class="movie-info">
+      <div class="movie-num">No. ${String(i+1).padStart(2,'0')}</div>
+      <div class="movie-name">${m.title}</div>
+    </div>
+  `;
+
+  // Click opens modal — radio keeps playing
+  card.addEventListener('click', () => openModal(m));
+
+  grid.appendChild(card);
+
+  const thumbDiv   = card.querySelector('.movie-thumb');
+  const placeholder = card.querySelector(`#placeholder-${i}`);
+  const overlay    = card.querySelector('.play-overlay');
+
+  function tryThumb(srcs) {
+    if (!srcs.length) return;
+    const t = new Image();
+    t.onload = () => {
+      placeholder.style.display = 'none';
+      const img = document.createElement('img');
+      img.src  = srcs[0];
+      img.alt  = m.title;
+      thumbDiv.insertBefore(img, overlay);
+    };
+    t.onerror = () => tryThumb(srcs.slice(1));
+    t.src = srcs[0];
+  }
+  tryThumb(thumbSrcs);
+});
+
+// ─────────────────────────────────────────────
+// SLIDESHOW — no captions shown
+// ─────────────────────────────────────────────
+
+const defaultImagePaths = [
+  'Images/IMG1.png','Images/IMG2.png','Images/IMG3.png','Images/IMG4.png',
+  'Images/IMG5.png','Images/IMG6.png','Images/IMG7.png','Images/IMG8.png',
+  'Images/IMG9.jpeg','Images/IMG10.jpeg','Images/IMG11.jpeg','Images/IMG12.jpeg',
+  'Images/IMG13.jpeg','Images/IMG14.jpeg','Images/IMG15.jpeg','Images/IMG16.jpeg',
+  'Images/IMG17.jpeg','Images/IMG18.jpeg','Images/IMG19.jpeg','Images/IMG20.jpeg',
+  'Images/IMG21.jpeg','Images/IMG22.jpeg','Images/IMG23.jpeg','Images/IMG24.jpeg',
+  'Images/IMG25.jpeg','Images/IMG26.jpeg','Images/IMG27.jpeg','Images/IMG28.jpeg',
+  'Images/IMG29.jpeg','Images/IMG30.jpeg','Images/IMG31.jpeg','Images/IMG32.jpeg',
+];
+
+const slideshowImages = defaultImagePaths;
+const EMOJI_PLACEHOLDERS = ['🎬','🍿','🎞️','🎭','⭐','🎥'];
+const slideshow = document.getElementById('slideshow');
+const dotsContainer = document.getElementById('slide-dots');
+let slides = [];
+let currentSlide = 0;
+let slideTimer = null;
+
+function buildSlide(src, idx) {
+  const div = document.createElement('div');
+  div.className = 'slide' + (idx === 0 ? ' active' : '');
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = '';  // no caption / alt text shown
+  const overlay = document.createElement('div');
+  overlay.className = 'slide-overlay';
+  div.appendChild(img);
+  div.appendChild(overlay);
+  // NO caption element added
+  slideshow.insertBefore(div, slideshow.querySelector('.slide-prev'));
+  return div;
+}
+
+function buildPlaceholderSlide(idx) {
+  const div = document.createElement('div');
+  div.className = 'slide' + (idx === 0 ? ' active' : '');
+  const emoji = document.createElement('div');
+  emoji.className = 'no-img';
+  emoji.textContent = EMOJI_PLACEHOLDERS[idx % EMOJI_PLACEHOLDERS.length];
+  const overlay = document.createElement('div');
+  overlay.className = 'slide-overlay';
+  div.appendChild(emoji);
+  div.appendChild(overlay);
+  slideshow.insertBefore(div, slideshow.querySelector('.slide-prev'));
+  return div;
+}
+
+function addDot(idx) {
+  const d = document.createElement('div');
+  d.className = 'dot' + (idx === 0 ? ' active' : '');
+  d.onclick = () => goToSlide(idx);
+  dotsContainer.appendChild(d);
+}
+
+function tryLoadImages() {
+  let found = 0;
+  let checked = 0;
+  const total = slideshowImages.length;
+
+  slideshowImages.forEach((src) => {
+    const test = new Image();
+    test.onload = () => {
+      buildSlide(src, found);
+      addDot(found);
+      slides = slideshow.querySelectorAll('.slide');
+      found++;
+      checked++;
+      if (checked === total && found === 0) buildFallback();
+      else if (checked === total) startAuto();
+    };
+    test.onerror = () => {
+      checked++;
+      if (checked === total && found === 0) buildFallback();
+      else if (checked === total && found > 0) startAuto();
+    };
+    test.src = src;
+  });
+}
+
+function buildFallback() {
+  for (let i = 0; i < 4; i++) {
+    buildPlaceholderSlide(i);
+    addDot(i);
+  }
+  slides = slideshow.querySelectorAll('.slide');
+  startAuto();
+}
+
+function goToSlide(n) {
+  slides[currentSlide].classList.remove('active');
+  dotsContainer.children[currentSlide].classList.remove('active');
+  currentSlide = (n + slides.length) % slides.length;
+  slides[currentSlide].classList.add('active');
+  dotsContainer.children[currentSlide].classList.add('active');
+}
+
+function changeSlide(dir) {
+  clearInterval(slideTimer);
+  goToSlide(currentSlide + dir);
+  startAuto();
+}
+
+function startAuto() {
+  clearInterval(slideTimer);
+  slideTimer = setInterval(() => goToSlide(currentSlide + 1), 4500);
+}
+
+tryLoadImages();
+
+// ─────────────────────────────────────────────
+// BULB LIGHTS
+// ─────────────────────────────────────────────
+
+const bulbContainer = document.getElementById('bulbs');
+const frame = document.querySelector('.marquee-frame');
+
+window.addEventListener('load', () => {
+  const fw = frame.offsetWidth;
+  const fh = frame.offsetHeight;
+  const spacing = 28;
+  const colors = ['#FFD700','#FFF5A0','#FFB347','#FFD700'];
+
+  function placeBulb(x, y, delay) {
+    const b = document.createElement('div');
+    b.className = 'bulb';
+    b.style.left = x + 'px';
+    b.style.top = y + 'px';
+    b.style.animationDelay = delay + 's';
+    b.style.background = colors[Math.floor(Math.random() * colors.length)];
+    bulbContainer.appendChild(b);
+  }
+
+  for (let x = 0; x <= fw + 28; x += spacing) {
+    placeBulb(x - 5, -5, (x / spacing) * 0.2);
+    placeBulb(x - 5, fh + 4, (x / spacing) * 0.2 + 0.5);
+  }
+  for (let y = spacing; y < fh; y += spacing) {
+    placeBulb(-5, y - 5, (y / spacing) * 0.2 + 0.1);
+    placeBulb(fw + 4, y - 5, (y / spacing) * 0.2 + 0.3);
+  }
+});
+
+// ─────────────────────────────────────────────
+// RADIO STREAM — completely independent of movie player
+// ─────────────────────────────────────────────
+
+const STREAM_URL = 'https://listen.streamaudio.co/proxy/stvradio/stream';
+
+const audio     = document.getElementById('theater-audio');
+const playIcon  = document.getElementById('play-icon');
+const pauseIcon = document.getElementById('pause-icon');
+const nowPlaying = document.getElementById('now-playing');
+const npTrack   = document.getElementById('np-track');
+const npBars    = document.getElementById('np-bars');
+let isPlaying   = false;
+
+function startRadio() {
+  audio.src = STREAM_URL;
+  audio.play().then(() => {
+    isPlaying = true;
+    playIcon.style.display = 'none';
+    pauseIcon.style.display = '';
+    npTrack.textContent = '📻 Radio Meltdown';
+    nowPlaying.classList.add('show');
+    npBars.classList.remove('paused');
+  }).catch(() => {
+    // Autoplay blocked — user must press play manually
+  });
+}
+
+function toggleMusic() {
+  if (!isPlaying) {
+    if (!audio.src) audio.src = STREAM_URL;
+    audio.play().then(() => {
+      isPlaying = true;
+      playIcon.style.display = 'none';
+      pauseIcon.style.display = '';
+      npTrack.textContent = '📻 Radio Meltdown';
+      nowPlaying.classList.add('show');
+      npBars.classList.remove('paused');
+    }).catch(() => {});
+  } else {
+    audio.pause();
+    isPlaying = false;
+    playIcon.style.display = '';
+    pauseIcon.style.display = 'none';
+    npBars.classList.add('paused');
+  }
+}
+
+// Try autoplay on load
+window.addEventListener('load', startRadio);
+</script>
+</body>
+</html>
