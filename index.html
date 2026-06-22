@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MyGirls OS PRO</title>
+
+<link rel="stylesheet" href="styles.css">
+<link rel="manifest" href="manifest.json">
+</head>
+
+<body>
+
+<!-- LOCK SCREEN -->
+<div id="lockScreen" class="screen center">
+  <h2>🔐 Parent Unlock</h2>
+  <input id="pinInput" type="password" placeholder="Enter PIN"/>
+  <button onclick="unlock()">Enter</button>
+</div>
+
+<!-- HOME -->
+<div id="home" class="screen hidden">
+  <div class="topbar">
+    <h3>MyGirls OS PRO</h3>
+    <button onclick="openParent()">⚙</button>
+  </div>
+
+  <div id="grid" class="grid"></div>
+</div>
+
+<!-- PLAYER -->
+<div id="player" class="screen hidden">
+  <div class="playerTop">
+    <button onclick="backHome()">⬅ Home</button>
+    <span id="title">Now Playing</span>
+    <button onclick="nextVideo()">Next ➜</button>
+  </div>
+
+  <video id="video" controls autoplay playsinline></video>
+
+  <div id="timer">00:00</div>
+</div>
+
+<!-- PARENT PANEL -->
+<div id="admin" class="screen hidden">
+  <h2>Parent Control Panel</h2>
+
+  <label>Set Daily Limit (minutes)</label>
+  <input id="limit" type="number" value="60"/>
+
+  <button onclick="saveSettings()">Save</button>
+  <button onclick="closeAdmin()">Close</button>
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
